@@ -1,0 +1,202 @@
+﻿<!DOCTYPE HTML>
+<HTML>
+    <HEAD>
+        <META CHARSET="UTF-8" AUTHOR="MAGNETICON">
+        <TITLE>SUBSTREX 1.00</TITLE>
+        <STYLE TYPE="TEXT/CSS">
+            BODY{
+                COLOR: #00CC00;
+                BACKGROUND-COLOR: #000000;
+                FONT-SIZE: 20PX;
+                FONT-FAMILY: 'Pcomm Session', monospace;
+            }
+            #CMD{
+                WIDTH: 90VW;
+                HEIGHT: 12.5VH;
+            }
+            .INPOUT{
+                WIDTH: 45VW;
+                HEIGHT: 25VH;
+                COLOR: #00CCFF;
+                BACKGROUND-COLOR: #000000;
+                BORDER: 3PX SOLID #00CC00;
+                FONT-SIZE: 20PX;
+                BORDER-RADIUS: 10PX;
+                OVERFLOW: AUTO;
+            }
+            .OUT{
+                WIDTH: 90VW;
+                HEIGHT: 35VH;
+                OVERFLOW: AUTO;
+                BORDER: 3PX SOLID #00CC00;
+                COLOR: #FFCC00;
+                BACKGROUND-COLOR: #000000;
+                FONT-SIZE: 20PX;
+                BORDER-RADIUS: 10PX;
+            }
+            .TEXT{
+                BORDER: 3PX SOLID #00CC00;
+                COLOR: #FFCC00;
+                BACKGROUND-COLOR: #000000;
+                FONT-SIZE: 20PX;
+                BORDER-RADIUS: 10PX;
+                WIDTH: 70VW;
+            }
+            .OUTPUTS{
+                WIDTH: 95VW;
+                HEIGHT: 38VH;
+                OVERFLOW-Y: AUTO;
+                OVERFLOW-X: HIDDEN;
+                COLOR: #FFCC00;
+                BACKGROUND-COLOR: #000000;
+            }
+            #MBOX{
+                BACKGROUND-COLOR: #0000AA;
+                COLOR: #FF0000;
+                WIDTH: 30VH;
+                HEIGHT: 8VH;
+                RIGHT: 2VH;
+                TOP: 2VH;
+                DISPLAY: FLEX;
+                JUSTIFY-CONTENT: CENTER;
+                ALIGN-ITEMS: CENTER;
+                FONT-SIZE: 4.5VH;
+                FONT-FAMILY: ARIAL;
+                FONT-WEIGHT: BOLD;
+                POSITION: ABSOLUTE;
+                BORDER-RADIUS: 10PX;
+            }
+            #MBOX:HOVER{
+                BACKGROUND-COLOR: #FF0000;
+                COLOR: #0000AA;
+                CURSOR: POINTER;
+            }
+            .BUTTON{
+                COLOR: #00CC00;
+                BACKGROUND-COLOR: #000000;
+                BORDER: 3PX OUTSET #00CC00;
+                DISPLAY: INLINE-FLEX;
+                JUSTIFY-CONTENT: CENTER;
+                FONT-WEIGHT: BOLD;
+                ALIGN-ITEMS: CENTER;
+                /* WIDTH: 200PX; */
+                HEIGHT: 40PX;
+                CURSOR: POINTER;
+                BORDER-RADIUS: 25PX;
+                WIDTH: FIT-CONTENT;
+                WHITE-SPACE: NOWRAP;
+            }
+            .BUTTONTABLE{
+                BORDER-RADIUS: 0PX;
+                WIDTH: FIT-CONTENT;
+                WHITE-SPACE: NOWRAP;
+            }
+            .BUTTON:HOVER{
+                COLOR: #000000;
+                BACKGROUND-COLOR: #00CC00;
+            }
+            #RECORDS{
+                COLOR: #FF00CC;
+            }
+            .RECORD{
+                COLOR: #FF00CC;
+            }
+        </STYLE>
+        <SCRIPT TYPE="TEXT/JAVASCRIPT">
+            function RUN(){
+                GtE("OUT").value = "";
+                var d1 = GtE("INP").value;
+                var H = d1.split(/\n/);
+                var S = GtE("PREFIX").value.trim();
+                var P = GtE("SUFFIX").value.trim();
+                var E = -2;
+                var F = -2;
+                var EREVERS = false;
+                var FREVERS = false;
+                var R = "";
+                var Q = 0;
+                for (var i = 0; i < S.length; i++){
+        //            if (S[i] != '0' && S[i] != '1' && S[i] != '2' && S[i] != '3' && S[i] != '4' && S[i] != '5' && S[i] != '6' && S[i] != '7' && S != '8' && S != '9'){
+                    if (S[i] != '0' && S[i] != '1' && S[i] != '2' && S[i] != '3' && S[i] != '4' && S[i] != '5' && S[i] != '6' && S[i] != '7' && S[i] != '8' && S[i] != '9'){
+                        E = -2;
+                        if (i == 0 && S[i] != '-'){
+                            EREVERS = true;
+                            E = 0;
+                        }
+                        else break;
+                    }
+                    else E = 0;
+                }
+                for (var i = 0; i < P.length; i++){
+//                    if (P[i] != '0' && P[i] != '1' && P[i] != '2' && P[i] != '3' && P[i] != '4' && P[i] != '5' && P[i] != '6' && P[i] != '7' && P != '8' && P != '9'){
+                    if (P[i] != '0' && P[i] != '1' && P[i] != '2' && P[i] != '3' && P[i] != '4' && P[i] != '5' && P[i] != '6' && P[i] != '7' && P[i] != '8' && P[i] != '9'){
+                        F = -2;
+                        if (i == 0 && P[i] == '-'){
+                            FREVERS = true;
+                            F = -1;
+                        }
+                        else break;
+                    }
+                    else F = -1;
+                }
+                if (E == -2) E = 0;
+                else{
+                    if (EREVERS) S = S.substr(1);
+                    E = parseInt(S, 10);
+                }
+                if (F == -2) F = -1;
+                else{
+                    if (FREVERS) P = P.substr(1);
+                    F = parseInt(P, 10);
+                }
+                var R = "";
+                var Q = 0;
+                for (var i = 0; i < H.length; i++){
+                    var M = E;
+                    var N = F;
+                    if (EREVERS) M = H[i].length-E;
+                    if (FREVERS) N = H[i].length-F;
+                    if (M < 0) M = 0;
+                    if (M > N && N >= 0){
+                        var C = M;
+                        M = N;
+                        N = C;
+                    }
+                    if (N >= 0) N = N-M;
+                    if (R != "") R += "\n";
+                    if (H[i].length > M){
+                        if (H[i].length > N && N >= 0) R += H[i].substr(M, N);
+                        else R += H[i].substr(M);
+                    }
+                    Q++;
+                }
+                GtE("OUT").value = R;
+                GtE("RECORDS").innerHTML = Q;
+            }
+            
+            function GtE(id){
+                return document.getElementById(id);
+            }
+        </SCRIPT>
+    </HEAD>
+    <BODY>
+        <H1>SUBSTREX 1.00</H1>
+        <I>Save manual work and have your text stripped from a thousands records long list!</I>
+        <BR><BR>
+        <TABLE>
+            <TR>
+                <TD>INPUT:<BR><TEXTAREA ID="INP" CLASS="INPOUT"></TEXTAREA></TD>
+                <TD STYLE="WIDTH: 5VH;"></TD>
+                <TD>OUTPUT:<BR><TEXTAREA ID="OUT" CLASS="INPOUT" STYLE="COLOR: #CC0000;"></TEXTAREA></TD>
+            </TR>
+        </TABLE>
+        <BR>
+        <SPAN CLASS="BUTTON" ONCLICK="JAVASCRIPT: RUN();">&nbsp;&nbsp;PROCESS&nbsp;&nbsp;</SPAN>
+        <SPAN STYLE="POSITION: ABSOLUTE; RIGHT: 10VH;"><B>TOTAL AMOUNT OF RECORDS:&nbsp;</B><SPAN ID="RECORDS">0</SPAN></SPAN>
+        <BR><BR>
+            Starting index (0 - no leading strip, negative number - index is substracted from total length of the line):<BR><INPUT TYPE="TEXT" ID="PREFIX" CLASS="TEXT">
+        <BR><BR>
+            Starting index (0 - no trailing strip, negative number - index is substracted from total length of the line):<BR><INPUT TYPE="TEXT" ID="SUFFIX" CLASS="TEXT">
+        <DIV ID="MBOX" ONCLICK="JAVASCRIPT: window.open('https://github.com/Magneticon', '_blank');">Magneticon</DIV>
+    </BODY>
+</HTML>
